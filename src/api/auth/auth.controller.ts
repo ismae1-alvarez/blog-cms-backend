@@ -10,14 +10,10 @@ const asyncWrapper = (handler: AsyncHandler) => {
 }
 
 export class AuthController {
-  static createAccountAuth = asyncWrapper(async (req: Request, res: Response) => {
-    const data = {
-      ...req.body,
-    }
+  static createAccountAuth = asyncWrapper(async (req, res) => {
+    const result = await AuthSevices.CreateAccountService(req.body, req.file)
 
-    const result = await AuthSevices.CreateAccountService(data)
-
-    return res.status(201).json(result)
+    res.status(201).json(result)
   })
 
   static loginAuth = asyncWrapper(async (_req: Request, res: Response) => {

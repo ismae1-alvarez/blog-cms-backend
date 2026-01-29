@@ -1,30 +1,38 @@
 import { hashPassword } from "../../utils/auth.js"
+import { HttpError } from "../../utils/http.error.js"
+import { uploadImage } from "../../utils/image.processor.js"
 import { AccountDao } from "./auth.dao.js"
 import type { AuthCreateType } from "./auth.schema.js"
 
 export class AuthSevices {
-  static async CreateAccountService(data: AuthCreateType): Promise<{ message: string } | null> {
-    const { name, description, email, password, img } = data
+  static async CreateAccountService(
+    data: AuthCreateType,
+    file?: Express.Multer.File,
+  ): Promise<{ message: string }> {
+    const { email, password } = data
 
-    // Validar si el email ya existe
     const userExists = await AccountDao.findByEmail(email)
 
+
     if (userExists) {
-      const error = new Error("El usuario ya está registrado...")
-      ;(error as any).status = 409
-      throw error
+      throw new HttpError("El usuario ya está registrado", 409)
     }
 
-    // HashPassword
+    let imageUrl = ""
+
+    if (file) {
+      imageUrl = await uploadImage(file, {
+        folder: "users",
+        publicId: `user_${Date.now()}`,
+      })
+    }
+
     const hashedPassword = await hashPassword(password)
 
-    // Guardamos los datos
-
-    return await AccountDao.CreateAccountDao({
-      name,
-      description,
+    return AccountDao.CreateAccountDao({
+      ...data,
       email,
-      img,
+      img: imageUrl,
       password: hashedPassword,
     })
   }
