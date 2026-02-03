@@ -1,8 +1,8 @@
 import type { NextFunction, Request, Response } from "express"
 import { AuthSevices } from "./auth.services.js"
 
-type AsyncHandler = (req: Request, res: Response, next: NextFunction) => Promise<unknown>
 
+type AsyncHandler = (req: Request, res: Response, next: NextFunction) => Promise<unknown>
 const asyncWrapper = (handler: AsyncHandler) => {
   return (req: Request, res: Response, next: NextFunction) => {
     Promise.resolve(handler(req, res, next)).catch(next)
@@ -16,8 +16,10 @@ export class AuthController {
     res.status(201).json(result)
   })
 
-  static loginAuth = asyncWrapper(async (_req: Request, res: Response) => {
-    res.send("Login")
+  static loginAuth = asyncWrapper(async (req: Request, res: Response) => {
+    const result = await AuthSevices.AuthLoginService(req.body)
+
+    res.status(200).json(result)
   })
 
   static accountAuth = asyncWrapper(async (_req: Request, res: Response) => {

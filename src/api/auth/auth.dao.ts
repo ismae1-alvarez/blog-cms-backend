@@ -1,4 +1,4 @@
-import Auth, { type IAuth } from "../../models/auth.js"
+import Auth, { IAuth } from "src/models/auth.js"
 import type { AuthCreateDbType, } from "./auth.schema.js"
 
 export class AccountDao {

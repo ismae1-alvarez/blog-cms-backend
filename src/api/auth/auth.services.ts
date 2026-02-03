@@ -1,8 +1,8 @@
-import { hashPassword } from "../../utils/auth.js"
-import { HttpError } from "../../utils/http.error.js"
-import { uploadImage } from "../../utils/image.processor.js"
+import { uploadImage } from "@utils/image.processor.js"
 import { AccountDao } from "./auth.dao.js"
 import type { AuthCreateType } from "./auth.schema.js"
+import { hashPassword } from "@utils/auth.js"
+import { CustomError } from "@domain/erorrs.js"
 
 export class AuthSevices {
   static async CreateAccountService(
@@ -15,7 +15,8 @@ export class AuthSevices {
 
 
     if (userExists) {
-      throw new HttpError("El usuario ya está registrado", 409)
+      // throw new HttpError("El usuario ya está registrado", 409)
+      throw CustomError.conflict("El usuario ya está registrado")
     }
 
     let imageUrl = ""
@@ -35,5 +36,14 @@ export class AuthSevices {
       img: imageUrl,
       password: hashedPassword,
     })
+  }
+
+
+  static async AuthLoginService(data: any): Promise<{ message: string }> {
+
+
+
+
+    return { message: "Se Logro" }
   }
 }

@@ -15,6 +15,7 @@
       "@routes/*": ["src/routes/*"],
       "@types/*": ["src/types/*"],
       "@utils/*": ["src/utils/*"],
+      "@domain/*": ["src/domain/*"],
     },
   },
   "include": ["src/**/*"],

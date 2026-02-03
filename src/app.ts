@@ -2,7 +2,7 @@ import type { Application, Request, Response } from "express"
 import express from "express"
 import { connectionBD } from "@config/db.js"
 import { AppRoutes } from "@routes/index.js"
-import { errorHandler } from "@middleware/error.middleware.js"
+import { globalErrorHandler } from "@middleware/error.middleware.js"
 
 class App {
   public app: Application
@@ -32,7 +32,7 @@ class App {
     this.app.use("/api/v1/", AppRoutes.routes)
 
     // Middleware Valibor Auth
-    this.app.use(errorHandler)
+    this.app.use(globalErrorHandler)
   }
 }
 
