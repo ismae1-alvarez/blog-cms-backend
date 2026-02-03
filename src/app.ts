@@ -1,8 +1,8 @@
+import { connectionBD } from "@config/db.js"
+import { globalErrorHandler } from "@middleware/error.middleware.js"
+import { AppRoutes } from "@routes/index.js"
 import type { Application, Request, Response } from "express"
 import express from "express"
-import { connectionBD } from "@config/db.js"
-import { AppRoutes } from "@routes/index.js"
-import { globalErrorHandler } from "@middleware/error.middleware.js"
 
 class App {
   public app: Application
