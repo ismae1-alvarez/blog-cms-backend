@@ -17,7 +17,7 @@ export class AuthController {
   })
 
   static loginAuth = asyncWrapper(async (req: Request, res: Response) => {
-    const result = await AuthSevices.AuthLoginService(req.body)
+    const result = await AuthSevices.AuthLoginService(req.body);
 
     res.status(200).json(result)
   })

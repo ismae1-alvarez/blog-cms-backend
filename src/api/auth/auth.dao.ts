@@ -1,12 +1,12 @@
-import Auth, { IAuth } from "src/models/auth.js"
-import type { AuthCreateDbType, } from "./auth.schema.js"
+import Auth, { type IAuth } from "src/models/auth.js"
+import type { AuthCreateType } from "./auth.schema.js"
 
 export class AccountDao {
   static async findByEmail(email: string): Promise<IAuth | null> {
     return await Auth.findOne({ email })
   }
 
-  static async CreateAccountDao(data: AuthCreateDbType): Promise<{ message: string } | null> {
+  static async CreateAccountDao(data: AuthCreateType): Promise<{ message: string } | null> {
     const user = new Auth(data)
 
     await user.save()
