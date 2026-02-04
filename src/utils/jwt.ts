@@ -6,7 +6,7 @@ const JWT_SECRET: Secret = envs.JWT as string;
 export class JwtAdapter {
   static async generateToken(
     payload: object,
-    duration: jwt.SignOptions["expiresIn"] = "3h"
+    duration: jwt.SignOptions["expiresIn"] = "4d"
   ): Promise<string | null> {
     return new Promise((resolve) => {
       jwt.sign(payload, JWT_SECRET, { expiresIn: duration }, (err, token) => {
@@ -14,7 +14,7 @@ export class JwtAdapter {
         resolve(token);
       });
     });
-  }
+  };
 
   static async validateToken<T>(token: string): Promise<T | null> {
     return new Promise((resolve) => {
@@ -23,5 +23,5 @@ export class JwtAdapter {
         resolve(decoded as T);
       });
     });
-  }
-}
+  };
+};
