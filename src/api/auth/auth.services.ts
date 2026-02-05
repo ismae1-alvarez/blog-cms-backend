@@ -52,10 +52,19 @@ export class AuthSevices {
 
     if (!isPasswordCorrect) {
       throw CustomError.unauthorized("Invalid password or email")
-    }
+    };
 
-    const token = await JwtAdapter.generateToken({ id: user._id })
+    const token = await JwtAdapter.generateToken({ id: user._id });
 
-    return { token }
-  }
-}
+    return { token };
+  };
+
+  async GetUser(id: string): Promise<IAuth | null> {
+
+    const user = await this.authDao.FingUser(id)
+    if (!user) {
+      throw CustomError.notFound("Usuario no encontrado");
+    };
+    return user;
+  };
+};

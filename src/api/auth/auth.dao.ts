@@ -7,8 +7,10 @@ export class AccountDao {
   };
   async CreateAccountDao(data: AuthCreateType): Promise<IAuth | null> {
     const user = new Auth(data)
-
     return await user.save()
+  };
 
+  async FingUser(id: string): Promise<IAuth | null> {
+    return await Auth.findById(id).select("-password")
   };
 };

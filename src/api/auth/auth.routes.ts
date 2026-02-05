@@ -27,8 +27,8 @@ export class AuthRouter {
       authController.loginAuth
     );
 
-    // router.use(AuthMiddleware.protect);
-    // router.get("/account", AuthController.accountAuth);
+    router.use(AuthMiddleware.protect);
+    router.get("/account", authController.accountAuth);
 
     // router.put("/update", AuthController.updateAuth);
 

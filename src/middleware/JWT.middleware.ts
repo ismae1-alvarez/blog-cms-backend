@@ -2,6 +2,15 @@ import { JwtAdapter } from "@utils/jwt.js"
 import type { NextFunction, Request, Response } from "express"
 import Auth from "src/models/auth.js"
 
+declare global {
+  namespace Express {
+    interface Request {
+      user?: typeof user
+    }
+  }
+};
+
+
 export class AuthMiddleware {
   static async protect(req: Request, res: Response, next: NextFunction) {
     const authorization = req.header("Authorization")
@@ -9,22 +18,24 @@ export class AuthMiddleware {
 
     if (!authorization.startsWith("Bearer "))
       return res.status(401).json({ message: "Invalid token" })
-
-    const token = authorization.split(" ").at(1) || ""
+    const token = authorization.split(" ")[1];
 
     try {
-      const payload = await JwtAdapter.validateToken<{ id: number }>(token)
-      if (!payload) return res.status(401).json({ message: "Invalid token" })
+      const payload = await JwtAdapter.validateToken<{ id: string }>(token)
 
-      const user = await Auth.findOne({
-        where: {
-          id: payload.id,
-        },
-      })
-      if (!user) return res.status(401).json({ message: "Invalid user" })
+      if (!payload?.id)
+        return res.status(401).json({ message: "Invalid token" })
 
-      req.body.sessionUser = user
+      const user = await Auth
+        .findById(payload.id)
+        .select("-password")
+
+      if (!user)
+        return res.status(401).json({ message: "User not found" })
+
+      req.user = user
       next()
+
     } catch (error: unknown) {
       return res.status(500).json({ message: "Something went wrong!" })
     }
