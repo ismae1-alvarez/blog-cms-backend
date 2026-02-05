@@ -1,5 +1,5 @@
-import { logger } from "@config/logger.js"
 import { asyncWrapper } from "@core/asyncWrapper.js"
+import { CustomError } from "@domain/erorrs.js"
 import type { Request, Response } from "express"
 import type { AuthSevices } from "./auth.services.js"
 
@@ -24,7 +24,16 @@ export class AuthController {
       .then((user) => res.status(200).json(user))
   })
 
-  updateAuth = asyncWrapper(async (_req: Request, res: Response) => {
-    res.send("Update")
-  })
+  updateAuth = asyncWrapper(async (req: Request, res: Response) => {
+    if (!Object.keys(req.body).length && !req.file) {
+      throw CustomError.badRequest("No hay datos para actualizar");
+    };
+
+    const id = req.user.id;
+
+    const data = { id, ...req.body, }
+
+    const result = await this.authService.UpdateUserService(data, req.file)
+    res.status(200).json(result);
+  });
 }

@@ -4,7 +4,7 @@ import { AuthMiddleware } from "@middleware/JWT.middleware.js";
 import { Router } from "express"
 import { AuthController } from "./auth.controller.js"
 import { AccountDao } from "./auth.dao.js";
-import { AuthCreateSchema, AuthLoginSchema } from "./auth.schema.js"
+import { AuthCreateSchema, AuthLoginSchema, AuthUpdateSchema } from "./auth.schema.js"
 import { AuthSevices } from "./auth.services.js";
 
 export class AuthRouter {
@@ -14,7 +14,6 @@ export class AuthRouter {
     const authDao = new AccountDao()
     const authServices = new AuthSevices(authDao);
     const authController = new AuthController(authServices);
-
 
     router.post(
       "/create-account",
@@ -30,7 +29,11 @@ export class AuthRouter {
     router.use(AuthMiddleware.protect);
     router.get("/account", authController.accountAuth);
 
-    // router.put("/update", AuthController.updateAuth);
+    router.put("/update",
+      upload.single("img"),
+      AuthValidateBody(AuthUpdateSchema),
+      authController.updateAuth
+    );
 
     return router;
   };

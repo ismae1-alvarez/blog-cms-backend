@@ -1,3 +1,4 @@
+import { partial } from "node_modules/valibot/dist/index.cjs";
 import { email, type InferOutput, minLength, object, pick, pipe, string } from "valibot"
 
 export const AuthCreateSchema = object({
@@ -14,3 +15,27 @@ export type AuthCreateType = InferOutput<typeof AuthCreateSchema>
 export const AuthLoginSchema = pick(AuthCreateSchema, ["email", "password"]);
 
 export type AuthLoginType = InferOutput<typeof AuthLoginSchema>;
+
+
+
+const IdSchema = object({
+  id: string("El ID es obligatorio")
+});
+
+export const AuthUpdateSchema = partial(
+  object({
+    name: pipe(string(), minLength(1, "Name no puede estar vacío")),
+    email: pipe(string(), email("Email inválido")),
+    password: pipe(string(), minLength(6, "Password muy corto")),
+    description: pipe(string(), minLength(1)),
+  })
+);
+
+
+
+export const AuthFullUpdateSchema = object({
+  ...IdSchema.entries,
+  ...AuthUpdateSchema.entries
+});
+
+export type AuthFullUpdateType = InferOutput<typeof AuthFullUpdateSchema>;

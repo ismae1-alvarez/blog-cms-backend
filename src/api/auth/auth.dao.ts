@@ -13,4 +13,10 @@ export class AccountDao {
   async FingUser(id: string): Promise<IAuth | null> {
     return await Auth.findById(id).select("-password")
   };
+
+  async UpdateUser(user: IAuth): Promise<{ message: string }> {
+    await user.save()
+    return { message: "success" }
+  }
+
 };
