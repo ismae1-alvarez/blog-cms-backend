@@ -2,18 +2,18 @@ import { upload } from "@config/multer.js"
 import { AuthValidateBody } from "@middleware/auth.middleware.js";
 import { AuthMiddleware } from "@middleware/JWT.middleware.js";
 import { Router } from "express"
-import { AuthController } from "./auth.controller.js"
-import { AccountDao } from "./auth.dao.js";
-import { AuthCreateSchema, AuthLoginSchema, AuthUpdateSchema } from "./auth.schema.js"
-import { AuthSevices } from "./auth.services.js";
+import { UserController } from "./user.controller.js";
+import { AccountUserDao } from "./user.dao.js";
+import { AuthCreateSchema, AuthLoginSchema, AuthUpdateSchema } from "./user.schema.js"
+import { userSevices } from "./user.services.js";
 
-export class AuthRouter {
+export class userRouter {
   static get routes(): Router {
     const router = Router();
 
-    const authDao = new AccountDao()
-    const authServices = new AuthSevices(authDao);
-    const authController = new AuthController(authServices);
+    const authDao = new AccountUserDao()
+    const authServices = new userSevices(authDao);
+    const authController = new UserController(authServices);
 
     router.post(
       "/create-account",

@@ -1,26 +1,25 @@
 import { asyncWrapper } from "@core/asyncWrapper.js"
 import { CustomError } from "@domain/erorrs.js"
 import type { Request, Response } from "express"
-import type { AuthSevices } from "./auth.services.js"
+import type { userSevices } from "./user.services.js"
 
-export class AuthController {
-
-  constructor(private readonly authService: AuthSevices) { }
+export class UserController {
+  constructor(private readonly userService: userSevices) { }
 
   createAccountAuth = asyncWrapper(async (req: Request, res: Response) => {
-    this.authService
+    this.userService
       .CreateAccountService(req.body, req.file)
       .then((user) => res.status(201).json(user))
 
   })
 
   loginAuth = asyncWrapper(async (req: Request, res: Response) => {
-    this.authService.AuthLoginService(req.body)
+    this.userService.AuthLoginService(req.body)
       .then((user) => res.status(200).json(user))
   })
 
   accountAuth = asyncWrapper(async (req: Request, res: Response) => {
-    this.authService.GetUser(req.user.id)
+    this.userService.GetUserService(req.user.id)
       .then((user) => res.status(200).json(user))
   })
 
@@ -33,7 +32,7 @@ export class AuthController {
 
     const data = { id, ...req.body, }
 
-    const result = await this.authService.UpdateUserService(data, req.file)
+    const result = await this.userService.UpdateUserService(data, req.file)
     res.status(200).json(result);
   });
 }

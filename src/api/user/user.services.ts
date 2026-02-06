@@ -3,18 +3,18 @@ import { checkPassword, hashPassword } from "@utils/auth.js"
 import { uploadImage } from "@utils/image.processor.js"
 import { JwtAdapter } from "@utils/jwt.js"
 import type { IAuth } from "src/models/auth.js"
-import type { AccountDao } from "./auth.dao.js"
-import type { AuthCreateType, AuthFullUpdateType, AuthLoginType } from "./auth.schema.js"
+import type { AccountUserDao } from "./user.dao.js"
+import type { AuthCreateType, AuthFullUpdateType, AuthLoginType } from "./user.schema.js"
 
-export class AuthSevices {
-  constructor(private readonly authDao: AccountDao) { }
+export class userSevices {
+  constructor(private readonly authDao: AccountUserDao) { }
   async CreateAccountService(
     data: AuthCreateType,
     file?: Express.Multer.File,
   ): Promise<IAuth | null> {
     const { email, password } = data
 
-    const userExists = await this.authDao.findByEmail(email)
+    const userExists = await this.authDao.findByEmailDao(email)
 
     if (userExists) {
       throw CustomError.conflict("El usuario ya está registrado")
@@ -41,7 +41,7 @@ export class AuthSevices {
   async AuthLoginService(data: AuthLoginType): Promise<{ token: string }> {
     const { password, email } = data
 
-    const user = await this.authDao.findByEmail(email)
+    const user = await this.authDao.findByEmailDao(email)
 
     if (!user) {
       throw CustomError.unauthorized("Credenciales inválidas")
@@ -59,8 +59,8 @@ export class AuthSevices {
     return { token };
   };
 
-  async GetUser(id: string): Promise<IAuth | null> {
-    const user = await this.authDao.FingUser(id)
+  async GetUserService(id: string): Promise<IAuth | null> {
+    const user = await this.authDao.FingUserDao(id)
     if (!user) {
       throw CustomError.notFound("Usuario no encontrado");
     };
@@ -68,12 +68,12 @@ export class AuthSevices {
   };
 
   async UpdateUserService(updateUser: AuthFullUpdateType, file?: Express.Multer.File,): Promise<{ message: string }> {
-    const user = await this.GetUser(updateUser.id);
+    const user = await this.GetUserService(updateUser.id);
 
 
     if (updateUser.email && updateUser.email !== user.email) {
       // await this.authDao.findByEmail(updateUser.email)
-      const emailExists = await this.authDao.findByEmail(updateUser.email)
+      const emailExists = await this.authDao.findByEmailDao(updateUser.email)
       if (emailExists) {
         throw CustomError.conflict("El email ya está en uso")
       }
@@ -87,7 +87,7 @@ export class AuthSevices {
     }
 
     if (updateUser.description) {
-      user.name = updateUser.description
+      user.description = updateUser.description
     }
 
     // Password
@@ -103,7 +103,7 @@ export class AuthSevices {
       });
     };
 
-    return await this.authDao.UpdateUser(user)
+    return await this.authDao.UpdateUserDao(user)
   };
 
 
