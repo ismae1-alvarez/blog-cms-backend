@@ -7,7 +7,7 @@ export class AppRoutes {
     const routes = Router()
 
     // Router Auth
-    routes.use(userRouter.routes)
+    routes.use("/user", userRouter.routes);
     routes.use("/post", postRouter.routes);
 
     return routes
