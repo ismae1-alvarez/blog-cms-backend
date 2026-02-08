@@ -7,32 +7,29 @@ export class UserController {
   constructor(private readonly userService: userSevices) { }
 
   createAccountAuth = asyncWrapper(async (req: Request, res: Response) => {
-    this.userService
-      .CreateAccountService(req.body, req.file)
-      .then((user) => res.status(201).json(user))
-
+    const user = await this.userService.CreateAccountService(req.body, req.file)
+    res.status(201).json(user)
   })
 
   loginAuth = asyncWrapper(async (req: Request, res: Response) => {
-    this.userService.AuthLoginService(req.body)
-      .then((user) => res.status(200).json(user))
+    const user = await this.userService.AuthLoginService(req.body)
+    res.status(200).json(user)
   })
 
   accountAuth = asyncWrapper(async (req: Request, res: Response) => {
-    this.userService.GetUserService(req.user.id)
-      .then((user) => res.status(200).json(user))
+    const user = await this.userService.GetUserService(req.user.id)
+    res.status(200).json(user)
   })
 
   updateAuth = asyncWrapper(async (req: Request, res: Response) => {
     if (!Object.keys(req.body).length && !req.file) {
       throw CustomError.badRequest("No hay datos para actualizar");
-    };
+    }
 
     const id = req.user.id;
-
-    const data = { id, ...req.body, }
+    const data = { id, ...req.body }
 
     const result = await this.userService.UpdateUserService(data, req.file)
-    res.status(200).json(result);
+    res.status(200).json(result)
   });
 }
