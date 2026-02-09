@@ -1,12 +1,17 @@
 import { AuthMiddleware } from "@middleware/JWT.middleware.js";
-import { type Request, type Response, Router } from "express"
+import { Router } from "express"
 import { PostController } from "./post.controller.js";
+import { PostDao } from "./post.dao.js";
+import { PostService } from "./post.services.js";
 
 export class postRouter {
   static get routes(): Router {
     const router = Router()
 
-    const postController = new PostController()
+
+    const postDao = new PostDao();
+    const postService = new PostService(postDao);
+    const postController = new PostController(postService);
 
     router.get("/",
       postController.getPost
@@ -14,22 +19,22 @@ export class postRouter {
 
 
     router.get("/:id",
-      postController.getByPost
+      postController.getByPost,
     );
 
-    // router.use(AuthMiddleware.protect);
+    router.use(AuthMiddleware.protect);
 
-    router.post("/create", (_req: Request, res: Response) => {
-      res.send("Create")
-    });
+    router.post("/create",
+      postController.createPost
+    );
 
-    router.put("/update/:id", (_req: Request, res: Response) => {
-      res.send("update")
-    });
+    router.put("/update/:id",
+      postController.updatePost
+    );
 
-    router.delete("/delete/:id", (_req: Request, res: Response) => {
-      res.send("delete")
-    });
+    router.delete("/delete/:id",
+      postController.deletePost
+    );
 
     return router;
   };
