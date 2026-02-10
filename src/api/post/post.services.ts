@@ -1,27 +1,33 @@
-import type { PostDao } from "./post.dao.js";
+import type { IPost } from "src/models/post.js"
+import type { PostDao } from "./post.dao.js"
 
 export class PostService {
+  constructor(private readonly postDao: PostDao) { }
 
-  constructor(private readonly postDao: PostDao) { };
-
-  async getPost() {
-    return { message: "Se logro" };
+  async getPost(): Promise<IPost[]> {
+    return await this.postDao.findPost()
   };
 
-  async getPostById(id: string) {
-    return id;
-  };
+  async getPostById(id: string): Promise<IPost> {
+    const post = await this.postDao.findByPost(id)
 
-  async createPost(post: any, token: string) {
-    return { message: "Se logro" };
-  };
+    console.log(post)
 
+    return post
+  }
 
-  async updatePost(post: any, id: string, token: string) {
-    return { message: "Se logro" };
-  };
+  async createPost(dataPost: any): Promise<{ message: string }> {
+    const post = await this.postDao.createPost(dataPost)
+    return post
+  }
 
-  async deletePost(id: string, token: string) {
-    return { message: "Se logro" };
-  };
-};
+  async updatePost(updatePost: any, id: string): Promise<{ message: string }> {
+    const post = await this.postDao.updatePost(updatePost, id)
+    return post
+  }
+
+  async deletePost(id: string): Promise<{ message: string }> {
+    const post = await this.postDao.deletePost(id)
+    return post
+  }
+}
