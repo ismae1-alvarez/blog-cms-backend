@@ -2,15 +2,15 @@ import Auth, { type IAuth } from "src/models/auth.js"
 import type { AuthCreateType } from "./user.schema.js"
 
 export class AccountUserDao {
-  async findByEmailDao(email: string): Promise<IAuth | null> {
+  async findByEmailDao(email: string): Promise<IAuth> {
     return await Auth.findOne({ email })
   };
-  async CreateAccountDao(data: AuthCreateType): Promise<IAuth | null> {
+  async CreateAccountDao(data: AuthCreateType): Promise<IAuth> {
     const user = new Auth(data)
     return await user.save()
   };
 
-  async FingUserDao(id: string): Promise<IAuth | null> {
+  async FingUserDao(id: string): Promise<IAuth> {
     return await Auth.findById(id).select("-password")
   };
 

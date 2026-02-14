@@ -1,5 +1,5 @@
 import { asyncWrapper } from "@core/asyncWrapper.js"
-import { CustomError } from "@domain/erorrs.js"
+import { CustomError } from "@core/erorrs.js"
 import type { Request, Response } from "express"
 import type { userSevices } from "./user.services.js"
 

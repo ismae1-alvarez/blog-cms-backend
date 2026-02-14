@@ -1,4 +1,4 @@
-import { CustomError } from "@domain/erorrs.js"
+import { CustomError } from "@core/erorrs.js"
 import { checkPassword, hashPassword } from "@utils/auth.js"
 import { uploadImage } from "@utils/image.processor.js"
 import { JwtAdapter } from "@utils/jwt.js"
