@@ -11,6 +11,8 @@ export const AuthCreateSchema = object({
 
 export type AuthCreateType = InferOutput<typeof AuthCreateSchema>
 
+export const ValidateSchemaMiddleware = pick(AuthCreateSchema, ["description", "email", "name", "password"]);
+
 
 export const AuthLoginSchema = pick(AuthCreateSchema, ["email", "password"]);
 

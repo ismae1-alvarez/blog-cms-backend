@@ -7,6 +7,9 @@ export class UserController {
   constructor(private readonly userService: userSevices) { }
 
   createAccountAuth = asyncWrapper(async (req: Request, res: Response) => {
+    if (!req.file) {
+      throw CustomError.badRequest("Se requiere una img");
+    }
     const user = await this.userService.CreateAccountService(req.body, req.file)
     res.status(201).json(user)
   })

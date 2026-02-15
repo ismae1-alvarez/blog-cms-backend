@@ -1,3 +1,4 @@
+import { upload } from "@config/multer.js";
 import { AuthValidateBody } from "@middleware/auth.middleware.js";
 import { AuthMiddleware } from "@middleware/JWT.middleware.js";
 import { Router } from "express"
@@ -27,6 +28,7 @@ export class postRouter {
     router.use(AuthMiddleware.protect);
 
     router.post("/create",
+      upload.single("img"),
       AuthValidateBody(CreatePostSchema),
       postController.createPost
     );
@@ -38,6 +40,12 @@ export class postRouter {
     router.delete("/delete/:id",
       postController.deletePost
     );
+
+    router.post("/upload",
+      // upload.single("img"),
+      upload.single("file"),
+      postController.uploadImage
+    )
 
     return router;
   };
