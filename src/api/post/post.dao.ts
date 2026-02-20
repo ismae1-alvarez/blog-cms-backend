@@ -28,6 +28,8 @@ export class PostDao {
   }
 
   async deletePost(id: string): Promise<{ message: string }> {
-    return { message: `Delete post ${id}` }
-  }
-}
+    await Post.findByIdAndDelete(id);
+
+    return { message: "Post eliminado correctamente" };
+  };
+};

@@ -11,7 +11,6 @@ export class postRouter {
   static get routes(): Router {
     const router = Router()
 
-
     const postDao = new PostDao();
     const postService = new PostService(postDao);
     const postController = new PostController(postService);
@@ -19,8 +18,6 @@ export class postRouter {
     router.get("/",
       postController.getPost
     );
-
-
     router.get("/:id",
       postController.getByPost,
     );

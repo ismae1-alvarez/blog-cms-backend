@@ -1,4 +1,5 @@
 import { CustomError } from "@core/erorrs.js"
+import { deleteImage } from "@utils/deleteImage.js"
 import { uploadImage } from "@utils/image.processor.js"
 import type { IPost } from "src/models/post.js"
 import type { PostDao } from "./post.dao.js"
@@ -35,6 +36,22 @@ export class PostService {
   }
 
   async deletePost(id: string): Promise<{ message: string }> {
+    const existingPost = await this.getPostById(id);
+
+    if (!existingPost) {
+      throw CustomError.notFound("Post no encontrado");
+    }
+
+    const images = existingPost.content.filter(
+      (item: any) => item.type === "image" && item.meta?.id_public
+    );
+
+    await Promise.all(
+      images.map((img: any) =>
+        deleteImage(img.meta.id_public)
+      )
+    );
+
     const post = await this.postDao.deletePost(id)
     return post
   };
