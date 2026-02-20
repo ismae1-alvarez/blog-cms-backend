@@ -1,3 +1,4 @@
+import { CustomError } from "@core/erorrs.js"
 import { uploadImage } from "@utils/image.processor.js"
 import type { IPost } from "src/models/post.js"
 import type { PostDao } from "./post.dao.js"
@@ -20,9 +21,17 @@ export class PostService {
     return post
   }
 
-  async updatePost(updatePost: any, id: string): Promise<{ message: string }> {
-    const post = await this.postDao.updatePost(updatePost, id)
-    return post
+  async updatePost(updatePost: CreatePostType, id: string): Promise<{ message: string }> {
+
+    const existingPost = await this.getPostById(id);
+
+
+    if (!existingPost) {
+      throw CustomError.notFound("Post no encontrado");
+    }
+    const updated = await this.postDao.updatePost(id, updatePost);
+
+    return updated;
   }
 
   async deletePost(id: string): Promise<{ message: string }> {

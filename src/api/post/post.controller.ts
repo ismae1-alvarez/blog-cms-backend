@@ -31,7 +31,7 @@ export class PostController {
   updatePost = asyncWrapper(async (req: Request, res: Response) => {
     if (!isValidObjectId(req.params.id as string)) {
       throw CustomError.badRequest("ID Invalido")
-    }
+    };
     const updatePost = await this.postService.updatePost(req.body, req.params.id as string);
 
     return res.status(200).json({ updatePost })

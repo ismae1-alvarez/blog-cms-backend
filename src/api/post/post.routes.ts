@@ -34,6 +34,7 @@ export class postRouter {
     );
 
     router.put("/update/:id",
+      AuthValidateBody(CreatePostSchema),
       postController.updatePost
     );
 

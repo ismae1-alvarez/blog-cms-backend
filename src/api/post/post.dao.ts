@@ -7,7 +7,7 @@ export class PostDao {
     return findPost
   }
   async findByIdPost(id: string): Promise<IPost> {
-    return await Post.findById(id).select("-password")
+    return await Post.findById(id)
   }
 
   async createPost(post: CreatePostType): Promise<{ message: string }> {
@@ -16,8 +16,15 @@ export class PostDao {
     return { message: "Saved successfully" }
   };
 
-  async updatePost(postUpdate: any, id: string): Promise<{ message: string }> {
-    return { message: `updatePost: ${postUpdate} - ${id}` }
+  async updatePost(id: string, data: CreatePostType): Promise<{ message: string }> {
+    const reult: CreatePostType = await Post.findByIdAndUpdate(
+      id,
+      data,
+      { new: true }
+    );
+
+    return { message: `update post ${reult.title}` }
+
   }
 
   async deletePost(id: string): Promise<{ message: string }> {
