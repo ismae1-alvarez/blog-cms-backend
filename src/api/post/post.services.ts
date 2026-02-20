@@ -1,4 +1,5 @@
 import { uploadImage } from "@utils/image.processor.js"
+import { string } from "node_modules/valibot/dist/index.cjs"
 import type { IPost } from "src/models/post.js"
 import type { PostDao } from "./post.dao.js"
 import type { CreatePostType } from "./post.schema.js"
@@ -34,7 +35,7 @@ export class PostService {
   };
 
   async uploadPost(file?: Express.Multer.File): Promise<{ url: string, public_id: string }> {
-    let imageUrl = ""
+    let imageUrl: { url: string, public_id: string }
 
     if (file) {
       imageUrl = await uploadImage(file, {

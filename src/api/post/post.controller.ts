@@ -19,9 +19,9 @@ export class PostController {
   createPost = asyncWrapper(async (req: Request, res: Response) => {
 
     // console.log(req.file);
-    // const newPost = await this.postService.createPost(req.body);
+    const newPost = await this.postService.createPost(req.body);
 
-    return res.status(202).json({ message: "Sdfsf" });
+    return res.status(202).json({ newPost });
   })
 
   updatePost = asyncWrapper(async (req: Request, res: Response) => {

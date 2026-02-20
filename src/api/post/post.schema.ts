@@ -26,9 +26,10 @@ export const ContentBlockExamples = {
   },
   image: {
     type: "image",
-    value: "https://cdn.com/image.png",
+    value: "socrates",
     meta: {
-      caption: "Descripción opcional",
+      url: "https://cdn.com/image.png",
+      id_public: "id_33456565534",
     },
   },
 }
@@ -55,7 +56,7 @@ const ImageBlockSchema = object({
   meta: optional(
     object({
       url: pipe(string(), url()),
-      caption: optional(string()),
+      id_public: optional(string()),
     }),
   )
 })
