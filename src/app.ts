@@ -1,7 +1,9 @@
+import { corsOptions } from "@config/cors.js"
 import { connectionBD } from "@config/db.js"
 import { limiter } from "@config/rate.limit.js"
 import { globalErrorHandler } from "@middleware/error.middleware.js"
 import { AppRoutes } from "@routes/index.js"
+import cors from "cors";
 import type { Application, Request, Response } from "express"
 import express from "express"
 
@@ -14,7 +16,6 @@ class App {
     this.config()
     this.routes()
   }
-
   private async connectDatabase(): Promise<void> {
     await connectionBD()
   }
@@ -23,9 +24,8 @@ class App {
     // Body parsers
     this.app.use(express.json())
     this.app.use(express.urlencoded({ extended: true }));
-
-    this.app.use(limiter)
-
+    this.app.use(cors(corsOptions));
+    this.app.use(limiter);
   }
 
 
