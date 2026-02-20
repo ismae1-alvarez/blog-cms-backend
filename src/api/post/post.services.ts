@@ -1,3 +1,4 @@
+import { uploadImage } from "@utils/image.processor.js"
 import type { IPost } from "src/models/post.js"
 import type { PostDao } from "./post.dao.js"
 import type { CreatePostType } from "./post.schema.js"
@@ -30,5 +31,18 @@ export class PostService {
   async deletePost(id: string): Promise<{ message: string }> {
     const post = await this.postDao.deletePost(id)
     return post
-  }
+  };
+
+  async uploadPost(file?: Express.Multer.File): Promise<{ url: string, public_id: string }> {
+    let imageUrl = ""
+
+    if (file) {
+      imageUrl = await uploadImage(file, {
+        folder: "post",
+        publicId: `post_${Date.now()}`,
+      })
+    }
+
+    return imageUrl;
+  };
 }

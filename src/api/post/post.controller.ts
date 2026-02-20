@@ -1,6 +1,5 @@
-import cloudinary from "@config/cloudinaryConfig.js";
-// import { uploadToCloudinary } from "@config/multer.js";
 import { asyncWrapper } from "@core/asyncWrapper.js"
+import { CustomError } from "@core/erorrs.js";
 import type { Request, Response } from "express"
 import type { PostService } from "./post.services.js"
 
@@ -39,15 +38,12 @@ export class PostController {
 
   uploadImage = asyncWrapper(async (req: Request, res: Response) => {
     if (!req.file) {
-      return res.status(400).json({
-        message: "No se envió ningún archivo"
-      });
-    }
-    // const result = await uploadToCloudinary(req.file.buffer);
+      throw CustomError.badRequest("No hay archivos");
+    };
 
-    // return res.json({
-    //   url: req.result.secure_url
-    // });
+    const img_url = await this.postService.uploadPost(req.file)
+
+    res.status(202).json({ img_url });
   });
 
 

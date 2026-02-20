@@ -42,8 +42,7 @@ export class postRouter {
     );
 
     router.post("/upload",
-      // upload.single("img"),
-      upload.single("file"),
+      upload.single("img"),
       postController.uploadImage
     )
 

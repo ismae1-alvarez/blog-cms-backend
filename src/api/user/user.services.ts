@@ -20,7 +20,7 @@ export class userSevices {
       throw CustomError.conflict("El usuario ya está registrado")
     }
 
-    let imageUrl = ""
+    let imageUrl: { url: string; public_id: string };
 
     if (file) {
       imageUrl = await uploadImage(file, {
@@ -33,7 +33,7 @@ export class userSevices {
 
     return this.authDao.CreateAccountDao({
       ...data,
-      img: imageUrl,
+      img: imageUrl.url,
       password: hashedPassword,
     })
   }
@@ -97,10 +97,11 @@ export class userSevices {
 
     // Imagen
     if (file) {
-      user.img = await uploadImage(file, {
+      const img_url = await uploadImage(file, {
         folder: "users",
         publicId: `user_${user._id}`,
       });
+      user.img = img_url.url
     };
 
     return await this.authDao.UpdateUserDao(user)
