@@ -1,5 +1,6 @@
 import { asyncWrapper } from "@core/asyncWrapper.js"
 import { CustomError } from "@core/erorrs.js";
+import { isValidObjectId } from "@core/isValidObjectId.js";
 import type { Request, Response } from "express"
 import type { PostService } from "./post.services.js"
 
@@ -11,26 +12,35 @@ export class PostController {
   });
 
   getByPost = asyncWrapper(async (req: Request, res: Response) => {
-    const post = await this.postService.getPostById(`${req.params.id}`)
+
+    if (!isValidObjectId(req.params.id as string)) {
+      throw CustomError.badRequest("ID Invalido")
+    };
+    const post = await this.postService.getPostById(`${req.params.id}`);
 
     return res.status(200).json({ post });
-  })
+  });
 
   createPost = asyncWrapper(async (req: Request, res: Response) => {
 
-    // console.log(req.file);
     const newPost = await this.postService.createPost(req.body);
 
     return res.status(202).json({ newPost });
   })
 
   updatePost = asyncWrapper(async (req: Request, res: Response) => {
+    if (!isValidObjectId(req.params.id as string)) {
+      throw CustomError.badRequest("ID Invalido")
+    }
     const updatePost = await this.postService.updatePost(req.body, req.params.id as string);
 
     return res.status(200).json({ updatePost })
   })
 
   deletePost = asyncWrapper(async (req: Request, res: Response) => {
+    if (!isValidObjectId(req.params.id as string)) {
+      throw CustomError.badRequest("ID Invalido")
+    }
     const deletePost = await this.postService.deletePost(req.params.id as string);
 
     return res.status(200).json({ deletePost });
@@ -46,5 +56,4 @@ export class PostController {
     res.status(202).json({ img_url });
   });
 
-
-}
+};

@@ -1,5 +1,4 @@
 import { uploadImage } from "@utils/image.processor.js"
-import { string } from "node_modules/valibot/dist/index.cjs"
 import type { IPost } from "src/models/post.js"
 import type { PostDao } from "./post.dao.js"
 import type { CreatePostType } from "./post.schema.js"
@@ -12,10 +11,7 @@ export class PostService {
   }
 
   async getPostById(id: string): Promise<IPost> {
-    const post = await this.postDao.findByPost(id)
-
-    console.log(post)
-
+    const post = await this.postDao.findByIdPost(id)
     return post
   }
 

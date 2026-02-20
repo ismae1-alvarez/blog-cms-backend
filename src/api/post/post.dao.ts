@@ -6,8 +6,8 @@ export class PostDao {
     const findPost = await Post.find()
     return findPost
   }
-  async findByPost(id: string): Promise<IPost> {
-    return await Post.findById(id)
+  async findByIdPost(id: string): Promise<IPost> {
+    return await Post.findById(id).select("-password")
   }
 
   async createPost(post: CreatePostType): Promise<{ message: string }> {
